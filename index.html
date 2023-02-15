@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Password Strength Checker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        margin: 0;
+        padding: 20px;
+        background-color: #0077cc;
+        color: white;
+        text-align: center;
+      }
+      .container {
+        width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .password-strength {
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      .weak {
+        color: red;
+      }
+      .medium {
+        color: orange;
+      }
+      .strong {
+        color: green;
+      }
+      .suggestion {
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      li {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Password Strength Checker</h1>
+    <div class="container">
+      <label for="password">Enter your password:</label>
+      <input type="password" id="password" placeholder="Password" />
+      <div class="password-strength" id="password-strength"></div>
+      <div class="suggestion" id="suggestion"></div>
+    </div>
+    <script>
+      const passwordInput = document.querySelector("#password");
+      const passwordStrength = document.querySelector("#password-strength");
+      const suggestion = document.querySelector("#suggestion");
+        function checkPasswordStrength(password) {
+    let strength = 0;
+    if (password.length >= 8) {
+      strength += 1;
+    }
+    if (password.match(/[a-z]/)) {
+      strength += 1;
+    }
+    if (password.match(/[A-Z]/)) {
+      strength += 1;
+    }
+    if (password.match(/[0-9]/)) {
+      strength += 1;
+    }
+    if (password.match(/[$@#&!]/)) {
+      strength += 1;
+    }
+    return strength;
+  }
+
+  function suggestPassword() {
+    const suggestions = [
+      "Add more characters to your password",
+      "Use a mix of upper and lower case letters",
+      "Include numbers in your password",
+      "Add a symbol like $, @, # or & to your password",
+      "Avoid using common words or phrases",
+      "Use a passphrase instead of a password",
+    ];
+    const suggestionList = document.createElement("ul");
+    for (let i = 0; i < suggestions.length; i++) {
+      const suggestionItem = document.createElement("li");
+      suggestionItem.textContent = suggestions[i];
+      suggestionList.appendChild(suggestionItem);
+    }
+    suggestion.appendChild(suggestionList);
+  }
+
+  passwordInput.addEventListener("input", function (event) {
+    const password = event.target.value;
+    if (password.length === 0) {
+      passwordStrength.textContent = "";
+      suggestion.textContent = "";
+    } else {
+      const strength = checkPasswordStrength(password);
+      let strengthText;
+      let suggestionText;
+      if (strength === 0) {
+        strengthText = "Weak";
+        suggestionText = "Add more characters to your password";
+      } else if (strength === 1) {
+        strengthText = "Weak";
+        suggestionText = "Add more complexity to your password";
+      } else if (strength === 2) {
+        strengthText = "Medium";
+        suggestionText = "Your password could be stronger";
+      } else if (strength === 3) {
+        strengthText = "Strong";
+        suggestionText = "Your password is strong, but could be stronger";
+      } else if (strength === 4) {
+        strengthText = "Very Strong";
+        suggestionText = "Your password is very strong";
+      }
+      passwordStrength.textContent = `Password strength: ${strengthText}`;
+      suggestion.textContent = `Suggestion: ${suggestionText}`;
+      if (strength <= 2) {
+        suggestPassword();
+      } else {
+        suggestion.textContent = "";
+      }
+    }
+  });
+</script>
+  </body>
+</html>
